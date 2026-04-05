@@ -11,27 +11,39 @@ This repository contains the **source code implementation** accompanying the sur
 
 > *"State-Sponsored C2 Detection via Chaotic Analysis: A Comprehensive Survey"*
 
-Advanced Persistent Threats (APTs) use stealthy **Command-and-Control (C2)** channels with highly jittered, non-periodic beaconing to evade detection. This project implements chaos-based detection techniques including:
-
-- **Lyapunov Exponent** — measures divergence/chaos in beacon intervals
-- **Shannon Entropy** — quantifies randomness in inter-arrival times
-- **Butterfly Optimization Algorithm (BOA)** — adaptively tunes detection thresholds
-- **Multi-metric Objective Function** `F = α·λ + β·H − γ·P`
+Advanced Persistent Threats (APTs) use stealthy **Command-and-Control (C2)** channels with highly jittered, non-periodic beaconing to evade detection. This project implements chaos-based detection techniques **integrated with an Intrusion Detection System (IDS)** that automatically alerts and blocks malicious sources.
 
 ---
 
 ## 📁 Repository Structure
 
 ```
-c2-detection-chaotic-analysis/
+Chaos-Based-Intrusion-Detection-System-for-C2-Detection/
 │
-├── c2_detection.py       # Main source code (all algorithms)
+├── C2-detection.py       # Core chaos-based detection algorithms
+├── ids_integration.py    # IDS engine — alerts, blocking, logging
 ├── README.md             # This file
 ├── requirements.txt      # Python dependencies
-│
-├── docs/
-│   ├── survey_paper.pdf  # Full survey paper
-│   └── presentation.pptx # Presentation slides
+└── Survey paper.pdf      # Full survey paper
+```
+
+---
+
+## ⚙️ How It Works
+
+```
+Network Traffic (beacon intervals)
+        ↓
+C2-detection.py
+  → Shannon Entropy
+  → Lyapunov Exponent
+  → BOA Threshold Tuning
+  → Anomaly Score F = α·λ + β·H − γ·P
+        ↓
+ids_integration.py (IDS Engine)
+  → 🟢 LOW      → MONITOR
+  → 🟡 HIGH     → WARNING
+  → 🔴 VERY HIGH → BLOCK IP ⛔ + Log Alert
 ```
 
 ---
@@ -47,12 +59,22 @@ c2-detection-chaotic-analysis/
 
 ---
 
+## 🛡️ IDS Features
+
+- **Real-time monitoring** of network traffic streams
+- **Chaos-based classification** — Periodic / Jittered / Chaotic
+- **Three alert levels** — INFO / WARNING / CRITICAL
+- **Automatic IP blocking** when anomaly score exceeds BOA-optimized threshold
+- **Alert logging** — all events saved to `ids_alerts.log`
+
+---
+
 ## ⚙️ Setup & Usage
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/YOUR_USERNAME/c2-detection-chaotic-analysis.git
-cd c2-detection-chaotic-analysis
+git clone https://github.com/majeedhanooq579-bot/Chaos-Based-Intrusion-Detection-System-for-C2-Detection.git
+cd Chaos-Based-Intrusion-Detection-System-for-C2-Detection
 ```
 
 ### 2. Install dependencies
@@ -60,25 +82,28 @@ cd c2-detection-chaotic-analysis
 pip install -r requirements.txt
 ```
 
-### 3. Run the experiment
+### 3. Run core detection only
 ```bash
-python c2_detection.py
+python C2-detection.py
 ```
 
-### Expected Output
+### 4. Run with IDS
+```bash
+python ids_integration.py
 ```
-============================================================
-C2 Detection via Chaotic Analysis — Experiment Demo
-JAIN University | Cyber Law Survey 2025-2026
-============================================================
 
-[BOA] Optimal entropy threshold: 2.XXXX
+### Expected IDS Output
+```
+[BOA] Optimized entropy threshold: 3.0007
 
-Signal Type   Variance    Entropy   Lyapunov     F-Score  Label        Threat
---------------------------------------------------------------------------------
-Periodic        0.0000     0.0000     0.0000      0.0000  Periodic     LOW
-Jittered        0.2500     2.0900     X.XXXX      X.XXXX  Jittered     HIGH
-Chaotic         6.7200     2.1800     X.XXXX      X.XXXX  Chaotic      VERY HIGH
+🟢 192.168.1.10 → Periodic   → MONITOR
+🔴 10.0.0.45    → Chaotic    → BLOCK ⛔
+🔴 172.16.0.99  → Chaotic    → BLOCK ⛔
+
+IDS SESSION SUMMARY
+Total streams inspected : 3
+Critical alerts raised  : 2
+IPs in blocklist        : 2
 ```
 
 ---
@@ -99,7 +124,6 @@ H(X) = -Σ p(x) log₂ p(x)
 ```
 F = α·λ + β·H − γ·P
 ```
-where λ = Lyapunov, H = Entropy, P = Periodicity score
 
 ### BOA Fragrance Model
 ```
@@ -123,6 +147,7 @@ f_i = c × I^a
 | Technology | Legal Relevance | Gap |
 |-----------|----------------|-----|
 | Chaos Detection | Strong attribution evidence | Not standardized in courts |
+| IDS Alerts | Digital forensics evidence | Admissibility varies by jurisdiction |
 | Traffic Analysis | GDPR compliance | Privacy vs security conflict |
 | APT Attribution | Cyber warfare laws | Lack of global consensus |
 
